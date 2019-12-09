@@ -44,16 +44,20 @@ public class WebCrawler implements IWebCrawler {
             String htmlPage = parseResponse(url);
             List<String> links = getLinksList(htmlPage);
 
-            for (String link : links) {
-                List<String> libs = getUsedJsLibraries(parseResponse(link));
-                for (String lib : libs) {
-                    if (libsFrequency.containsKey(lib)) {
-                        libsFrequency.put(lib, libsFrequency.get(lib) + 1);
-                    } else {
-                        libsFrequency.put(lib, 1);
+            links.parallelStream().forEach(link -> {
+                try {
+                    List<String> libs = getUsedJsLibraries(parseResponse(link));
+                    for (String lib : libs) {
+                        if (libsFrequency.containsKey(lib)) {
+                            libsFrequency.put(lib, libsFrequency.get(lib) + 1);
+                        } else {
+                            libsFrequency.put(lib, 1);
+                        }
                     }
+                } catch (IOException e) {
+                    System.out.println("Error occurred during : " + e.getLocalizedMessage());
                 }
-            }
+            });
         } catch (IOException e) {
             System.out.println("Error occurred: " + e.getLocalizedMessage());
         }

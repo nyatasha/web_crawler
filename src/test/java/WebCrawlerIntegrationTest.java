@@ -21,6 +21,6 @@ public class WebCrawlerIntegrationTest {
         List<String> libs = webCrawler.getTopLibraries("angular");
 
         Assert.assertEquals(5, libs.size());
-        Assert.assertEquals("analytics.js", libs.get(0));
+        Assert.assertEquals("base.js", libs.get(0));
     }
 }
